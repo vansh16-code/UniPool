@@ -1,0 +1,180 @@
+{% extends "unipool/base.html" %}
+{% load static %}
+
+{% block content %}
+<h2 class="page-title">Available Rides</h2>
+
+<ul class="ride-list">
+    {% for ride in rides %}
+        <li class="ride-item">
+            <p><strong>{{ ride.driver.username }}</strong></p>
+            <p><strong>Pickup Location:</strong> {{ ride.pickup_location }}</p>
+            <p><strong>Date:</strong> {{ ride.date }} | <strong>Available From:</strong> {{ ride.start_time }} to {{ ride.end_time }}</p>
+            <p><strong>Price Per km:</strong> ₹{{ ride.price }}</p>
+
+            {% if request.user in ride.passengers.all %}
+                <p><strong>Driver Contact:</strong> {{ ride.phone_number }}</p>
+            {% else %}
+                <p><strong>Driver Contact:</strong> Available after booking</p>
+            {% endif %}
+
+            <div class="button-container">
+                {% if request.user == ride.driver %}
+                    <form action="{% url 'delete_ride' ride.id %}" method="POST" 
+                          onsubmit="return confirm('Are you sure you want to delete this ride?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn delete-btn">Delete</button>
+                    </form>
+                {% else %}
+                    {% if request.user in ride.passengers.all %}
+                        <span class="badge booked">Ride Booked</span>
+                    {% elif ride.passengers.count >= ride.capacity %}
+                        <span class="badge full">Ride Full</span>
+                    {% else %}
+                        <form action="{% url 'book_ride' ride.id %}" method="POST" onsubmit="return validateCheckbox(this);">
+                            {% csrf_token %}
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="liability_{{ ride.id }}" name="liability" value="accepted" class="styled-checkbox">
+                                <label for="liability_{{ ride.id }}" class="checkbox-label">I accept liability for any damages during the ride.</label>
+                            </div>
+                            <button type="submit" class="btn book-btn">Book Ride</button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </li>
+    {% empty %}
+        <p class="no-rides">No rides available</p>
+    {% endfor %}
+</ul>
+
+<script>
+    function validateCheckbox(form) {
+        const checkbox = form.querySelector("input[name='liability']");
+        if (!checkbox.checked) {
+            alert("You must accept liability before booking this ride.");
+            return false;
+        }
+        return true;
+    }
+</script>
+
+<style>
+  body {
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: white;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+  }
+
+  .page-title {
+      text-align: center;
+      font-size: 24px;
+      margin-top: 90px;
+      margin-bottom: 15px;
+  }
+
+  
+  .ride-list {
+      display: flex;
+      flex-wrap: wrap; /* Allows wrapping */
+      justify-content: center; /* Center the items */
+      gap: 15px; /* Space between cards */
+      padding: 0;
+      list-style: none;
+  }
+
+  
+  .ride-item {
+      background-color: rgba(26, 26, 46, 0.9);
+      padding: 15px;
+      border-radius: 5px;
+      max-width: 300px; /* Fixed width */
+      flex: 1 1 300px; /* Responsive */
+      border: 1px solid white;
+      text-align: center;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      min-height: 220px;
+  }
+
+  .no-rides {
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      margin-top: 20px;
+  }
+
+  .button-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 10px;
+  }
+
+  .btn {
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      cursor: pointer;
+      border-radius: 3px;
+      width: auto;
+  }
+
+  .delete-btn { background-color: red; }
+  .book-btn { background-color: blue; }
+
+  .delete-btn:hover { background-color: darkred; }
+  .book-btn:hover { background-color: darkblue; }
+
+  .badge.booked {
+      background-color: #4CAF50;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 5px;
+      font-weight: bold;
+  }
+
+  .badge.full {
+      background-color: #FF5733;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 5px;
+      font-weight: bold;
+  }
+
+  /* ✅ Fixed checkbox styling */
+  .checkbox-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      max-width: 100%;
+      text-align: center;
+      word-wrap: break-word;
+      white-space: normal;
+      overflow: hidden;
+  }
+
+  .styled-checkbox {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+  }
+
+  .checkbox-label {
+      font-size: 14px;
+      cursor: pointer;
+      display: block;
+      text-align: left;
+      max-width: 90%;
+      overflow-wrap: break-word;
+      white-space: normal;
+  }
+</style>
+
+{% endblock %}

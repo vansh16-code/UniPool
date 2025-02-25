@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Pooling</title>
+    <link rel="stylesheet" href="{% static 'unipool/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; 
+        }
+        nav {
+            background-color: #1e1e1e;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            color: #00bfff;
+        }
+        .messages {
+            list-style: none;
+            padding: 10px;
+            margin: 0;
+        }
+        .success {
+            color: green;
+        }
+        .warning {
+            color: orange;
+        }
+        .error {
+            color: red;
+        }
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            flex: 1; 
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #1e1e1e;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 style="text-align: center; font-size: 28px; margin: 10px 0; color: white;">
+            UNIPOOL 🚗💨
+        </h1>
+    </header>
+    <nav>
+        <div>
+            <a href="{% url 'ride_list' %}">Home🏠</a>
+        </div>
+        <div>
+            {% if user.is_authenticated %}
+                <a href="{% url 'post_ride' %}">Post a Ride🚘</a>
+                <a href="{% url 'logout' %}">Logout👋</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login🔏</a>
+                <a href="{% url 'register' %}">Register🚪</a>
+            {% endif %}
+        </div>
+    </nav>
+    
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Vansh Mahajan. All rights reserved.</p>
+    </footer>
+    
+</body>
+</html>

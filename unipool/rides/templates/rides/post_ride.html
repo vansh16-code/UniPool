@@ -1,0 +1,9 @@
+{% extends "unipool/base.html" %}
+{% block content %}
+<h2>Post a Ride</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Post Ride</button>
+</form>
+{% endblock %}
