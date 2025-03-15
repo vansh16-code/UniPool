@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<h2 class="page-title">Available Rides</h2>
+<h2 class="page-title">Available Rides🚗</h2>
 
 <ul class="ride-list">
     {% for ride in rides %}
@@ -10,7 +10,7 @@
             <p><strong>{{ ride.driver.username }}</strong></p>
             <p><strong>Pickup Location:</strong> {{ ride.pickup_location }}</p>
             <p><strong>Date:</strong> {{ ride.date }} | <strong>Available From:</strong> {{ ride.start_time }} to {{ ride.end_time }}</p>
-            <p><strong>Price Per km:</strong> ₹{{ ride.price }}</p>
+            <p><strong>Price Per km: ( Depends on Vehicle)</strong> ₹{{ ride.price }}</p>
 
             {% if request.user in ride.passengers.all %}
                 <p><strong>Driver Contact:</strong> {{ ride.phone_number }}</p>
