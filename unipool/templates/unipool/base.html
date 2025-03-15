@@ -4,104 +4,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle Pooling</title>
+    <title>UniPool - Vehicle Pooling System</title>
     <link rel="stylesheet" href="{% static 'unipool/styles.css' %}">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #121212;
+            background: linear-gradient(135deg, #001F54, #004AAD);
             color: white;
             display: flex;
             flex-direction: column;
-            min-height: 100vh; 
+            min-height: 100vh;
         }
+
+        /* ================================
+            ✅ GNDU Blue Navbar Design
+        =================================== */
         nav {
-            background-color: #1e1e1e;
-            padding: 15px;
+            background: rgba(0, 10, 40, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 20px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
-        }
-        nav a:hover {
-            color: #00bfff;
-        }
-        .messages {
-            list-style: none;
-            padding: 10px;
-            margin: 0;
-        }
-        .success {
-            color: green;
-        }
-        .warning {
-            color: orange;
-        }
-        .error {
-            color: red;
-        }
-        .container {
-            padding: 20px;
-            max-width: 800px;
-            margin: auto;
-            flex: 1; 
-        }
-        footer {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
             position: fixed;
-            bottom: 0;
             width: 100%;
-            background-color: #1e1e1e;
-            color: white;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav a {
+            color: #00D4FF;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: 600;
+            font-size: 16px;
+            letter-spacing: 1px;
+            transition: 0.4s;
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+        nav a:hover {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00FFFF;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.9);
+            transform: scale(1.1);
+        }
+
+        /* ================================
+            ✅ Welcome Message Design
+        =================================== */
+        .welcome-text {
+            color: #00FF99;
+            font-size: 18px;
+            font-weight: bold;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ================================
+            ✅ Page Container
+        =================================== */
+        .container {
+            padding: 50px 20px;
+            max-width: 1100px;
+            margin: auto;
             text-align: center;
-            padding: 10px 0;
+            background: rgba(10, 25, 60, 0.9);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            margin-top: 120px;
+            flex: 1;
+        }
+
+        /* ================================
+            ✅ Footer Design
+        =================================== */
+        footer {
+            background: rgba(0, 10, 40, 0.9);
+            text-align: center;
+            padding: 15px 0;
             font-size: 14px;
-            font-family: Arial, sans-serif;
+            letter-spacing: 1px;
+            box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(15px);
+            margin-top: auto;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1 style="text-align: center; font-size: 28px; margin: 10px 0; color: white;">
-            UNIPOOL 🚗💨
-        </h1>
-    </header>
-    <nav>
-        <div>
-            <a href="{% url 'ride_list' %}">Home🏠</a>
-        </div>
-        <div>
-            {% if user.is_authenticated %}
-                <a href="{% url 'post_ride' %}">Post a Ride🚘</a>
-                <a href="{% url 'logout' %}">Logout👋</a>
-            {% else %}
-                <a href="{% url 'login' %}">Login🔏</a>
-                <a href="{% url 'register' %}">Register🚪</a>
-            {% endif %}
-        </div>
-    </nav>
-    
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li class="{{ message.tags }}">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    
-    <div class="container">
-        {% block content %}{% endblock %}
-    </div>
 
-    <footer>
-        <p>&copy; 2025 Vansh Mahajan. All rights reserved.</p>
-    </footer>
-    
+<!-- ✅ Navigation Bar -->
+<nav>
+    <div>
+        <a href="{% url 'landing_page' %}">🏠 Home</a>
+        <a href="{% url 'ride_list' %}">🚗 Find a Ride</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'post_ride' %}">🚘 Post a Ride</a>
+        {% endif %}
+    </div>
+    <div>
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}">Logout 👋</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login 🔏</a>
+            <a href="{% url 'register' %}">Register 🚪</a>
+        {% endif %}
+    </div>
+</nav>
+
+<!-- ✅ Success/Warning/Error Messages -->
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<!-- ✅ Page Content -->
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- ✅ Footer -->
+<footer>
+    <p>&copy; 2025 Vansh Mahajan. All rights reserved.</p>
+</footer>
+
 </body>
 </html>
