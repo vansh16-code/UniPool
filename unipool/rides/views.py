@@ -72,5 +72,7 @@ def book_ride(request, ride_id):
     
     return redirect("ride_list")
 
+def landing_page(request):
+    return render (request,'rides/landing,html')
 
 
