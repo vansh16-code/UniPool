@@ -1,0 +1,54 @@
+
+{% block content %}
+<div class="landing">
+    <h1>Welcome to UniPool</h1>
+    <p>Your ultimate vehicle pooling solution at GNDU 🚗💨</p>
+    <a href="{% url 'ride_list' %}" class="landing-btn">Find a Ride</a>
+    <a href="{% url 'register' %}" class="landing-btn">Join UniPool</a>
+</div>
+
+<style>
+    .landing {
+        text-align: center;
+        padding: 100px 20px;
+        animation: fadeIn 1.5s ease-out;
+    }
+
+    .landing h1 {
+        font-size: 48px;
+        text-shadow: 0 0 20px rgba(0, 191, 255, 0.9);
+    }
+
+    .landing p {
+        font-size: 20px;
+        margin: 20px 0;
+    }
+
+    .landing-btn {
+        padding: 15px 30px;
+        margin: 15px;
+        background: linear-gradient(135deg, #00D4FF, #004AAD);
+        text-decoration: none;
+        color: white;
+        border-radius: 12px;
+        transition: 0.4s;
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+    }
+
+    .landing-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 30px rgba(0, 191, 255, 1);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+{% endblock %}
