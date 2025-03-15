@@ -19,11 +19,10 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),  # Admin panel
-    path('users/', include('users.urls')),  # User authentication (Login, Register, Logout)
-    path('rides/', include('rides.urls')),  # Ride posting & listing
-
-    # Redirect the homepage to ride list
+    path('admin/', admin.site.urls),  
+    path('users/', include('users.urls')),  
+    path('rides/', include('rides.urls')), 
     path('', RedirectView.as_view(url='/rides/', permanent=True)),  
+   
 ]
 
